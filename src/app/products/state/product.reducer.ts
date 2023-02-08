@@ -11,12 +11,14 @@ export interface ProductState {
   showProductCode: boolean;
   currentProduct: Product;
   products: Product[];
+  error: string;
 }
 
 const initialState: ProductState = {
   showProductCode: true,
   currentProduct: null,
-  products: []
+  products: [],
+  error: null
 };
 
 const getProductFeatureState = createFeatureSelector<ProductState>('products');
@@ -36,27 +38,32 @@ export const getProducts = createSelector(
   state => state.products
 );
 
+export const getError = createSelector(
+  getProductFeatureState,
+  state => state.error
+);
+
 export const productReducer = createReducer<ProductState>(
   initialState,
-  on(ProductActions.toggleProductCode, state => {
+  on(ProductActions.toggleProductCode, (state): ProductState  => {
     return {
       ...state,
       showProductCode: !state.showProductCode
     };
   }),
-  on(ProductActions.setCurrentProduct, (state, action) => {
+  on(ProductActions.setCurrentProduct, (state, action): ProductState  => {
     return {
       ...state,
       currentProduct: action.product
     };
   }),
-  on(ProductActions.clearCurrentProduct, state => {
+  on(ProductActions.clearCurrentProduct, (state): ProductState  => {
     return {
       ...state,
       currentProduct: null
     };
   }),
-  on(ProductActions.initializeCurrentProduct, state => {
+  on(ProductActions.initializeCurrentProduct, (state): ProductState  => {
     return {
       ...state,
       currentProduct: {
@@ -66,6 +73,20 @@ export const productReducer = createReducer<ProductState>(
         description: '',
         starRating: 0
       }
+    };
+  }),
+  on(ProductActions.loadProductsSuccess, (state, action): ProductState  => {
+    return {
+      ...state,
+      products: action.products,
+      error: null
+    };
+  }),
+  on(ProductActions.loadProductsFailure, (state, action): ProductState => {
+    return {
+      ...state,
+      products: [],
+      error: action.error
     };
   })
 );

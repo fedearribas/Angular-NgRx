@@ -14,16 +14,13 @@ import * as UserActions from './state/user.actions';
 export class LoginComponent implements OnInit {
   pageTitle = 'Log In';
 
-  maskUserName: boolean;
+  maskUserName$ = this.store.select(getMaskUserName);
 
   constructor(private store: Store<any>, 
     private authService: AuthService, 
     private router: Router) { }
 
   ngOnInit(): void {
-    this.store.select(getMaskUserName).subscribe(
-      maskUserName => this.maskUserName = maskUserName
-    );
   }
 
   cancel(): void {
