@@ -21,9 +21,6 @@ export class ProductListComponent implements OnInit {
   // Used to highlight the selected product in the list
   selectedProduct$ = this.store.select(getCurrentProduct);
   errorMessage$ = this.store.select(getError);
-  
-
-
 
   constructor(private store: Store<State>) { }
 
@@ -40,7 +37,7 @@ export class ProductListComponent implements OnInit {
   }
 
   productSelected(product: Product): void {
-    this.store.dispatch(ProductActions.setCurrentProduct({ product }));
+    this.store.dispatch(ProductActions.setCurrentProduct({ currentProductId: product.id }));
   }
 
 }
